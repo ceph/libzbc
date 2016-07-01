@@ -1,3 +1,0 @@
-bin_PROGRAMS += zbc_set_zones
-zbc_set_zones_SOURCES = tools/set_zones/zbc_set_zones.c
-zbc_set_zones_LDADD = $(libzbc_ldadd)

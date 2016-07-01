@@ -1,3 +1,0 @@
-bin_PROGRAMS += zbc_report_zones
-zbc_report_zones_SOURCES = tools/report_zones/zbc_report_zones.c
-zbc_report_zones_LDADD = $(libzbc_ldadd)

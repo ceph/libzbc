@@ -11,6 +11,7 @@
  * 
  * Authors: Damien Le Moal (damien.lemoal@hgst.com)
  *          Christophe Louargant (christophe.louargant@hgst.com)
+ *          Shehbaz Jaffer (shehbaz.jaffer@mail.utoronto.ca)
  */
 
 /***** Including files *****/
@@ -31,8 +32,6 @@ int main(int argc,
     long long z;
     struct zbc_device *dev;
     int i, lba = 0, ret = 1;
-    zbc_zone_t *zones = NULL, *rzone = NULL;;
-    unsigned int nr_zones, rzone_idx = -1;
     char *path;
 
     /* Check command line */
@@ -81,12 +80,25 @@ usage:
 
     /* Open device */
     path = argv[i];
-    ret = zbc_open(path, O_RDONLY, &dev);
+
+    z = strtoll(argv[i + 1], NULL, 10);
+
+	return zbc_tools_finish(path, dev, &info);
+}
+
+int zbc_tools_finish(char *path, struct zbc_device_info *info, struct zbc_device *dev, long long z, int lba)
+{
+	int ret, i;
+
+    zbc_zone_t *zones = NULL, *rzone = NULL;;
+    unsigned int nr_zones, rzone_idx = -1;
+   
+	ret = zbc_open(path, O_RDONLY, &dev);
     if ( ret != 0 ) {
         return( 1 );
     }
 
-    ret = zbc_get_device_info(dev, &info);
+    ret = zbc_get_device_info(dev, info);
     if ( ret < 0 ) {
         fprintf(stderr,
                 "zbc_get_device_info failed\n");
@@ -95,21 +107,20 @@ usage:
 
     printf("Device %s: %s\n",
            path,
-           info.zbd_vendor_id);
+           info->zbd_vendor_id);
     printf("    %s interface, %s disk model\n",
-           zbc_disk_type_str(info.zbd_type),
-           zbc_disk_model_str(info.zbd_model));
+           zbc_disk_type_str(info->zbd_type),
+           zbc_disk_model_str(info->zbd_model));
     printf("    %llu logical blocks of %u B\n",
-           (unsigned long long) info.zbd_logical_blocks,
-           (unsigned int) info.zbd_logical_block_size);
+           (unsigned long long) info->zbd_logical_blocks,
+           (unsigned int) info->zbd_logical_block_size);
     printf("    %llu physical blocks of %u B\n",
-           (unsigned long long) info.zbd_physical_blocks,
-           (unsigned int) info.zbd_physical_block_size);
+           (unsigned long long) info->zbd_physical_blocks,
+           (unsigned int) info->zbd_physical_block_size);
     printf("    %.03F GB capacity\n",
-           (double) (info.zbd_physical_blocks * info.zbd_physical_block_size) / 1000000000);
+           (double) (info->zbd_physical_blocks * info->zbd_physical_block_size) / 1000000000);
 
     /* Target zone */
-    z = strtoll(argv[i + 1], NULL, 10);
     if ( z == -1 ) {
 
         printf("Finishing all zones...\n");

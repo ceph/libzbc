@@ -11,6 +11,7 @@
  *
  * Authors: Damien Le Moal (damien.lemoal@hgst.com)
  *          Christophe Louargant (christophe.louargant@hgst.com)
+ *          Shehbaz Jaffer (shehbaz.jaffer@mail.utoronto.ca)
  */
 
 /***** Including files *****/
@@ -22,6 +23,7 @@
 #include <errno.h>
 
 #include <libzbc/zbc.h>
+#include <zbc_tools.h>
 
 /***** Main *****/
 
@@ -69,8 +71,15 @@ usage:
         goto usage;
     }
 
+	const char *dev = argv[i];
+	return zbc_tools_info(dev, &info);
+}
+
+int	zbc_tools_info(const char *dev, struct zbc_device_info *info)
+{
     /* Open device */
-    ret = zbc_device_is_smr(argv[i], &info);
+	int ret;
+    ret = zbc_device_is_smr(dev, info);
     if ( ret < 0 ) {
         fprintf(stderr,
                 "zbc_device_is_smr failed %d (%s)\n",
@@ -81,23 +90,22 @@ usage:
 
     if ( ret ) {
 	printf("Device %s: %s\n",
-	       argv[i],
-	       info.zbd_vendor_id);
+	       dev,
+	       info->zbd_vendor_id);
 	printf("    %s interface, %s disk model\n",
-	       zbc_disk_type_str(info.zbd_type),
-	       zbc_disk_model_str(info.zbd_model));
+	       zbc_disk_type_str(info->zbd_type),
+	       zbc_disk_model_str(info->zbd_model));
 	printf("    %llu logical blocks of %u B\n",
-	       (unsigned long long) info.zbd_logical_blocks,
-	       (unsigned int) info.zbd_logical_block_size);
+	       (unsigned long long) info->zbd_logical_blocks,
+	       (unsigned int) info->zbd_logical_block_size);
 	printf("    %llu physical blocks of %u B\n",
-	       (unsigned long long) info.zbd_physical_blocks,
-	       (unsigned int) info.zbd_physical_block_size);
+	       (unsigned long long) info->zbd_physical_blocks,
+	       (unsigned int) info->zbd_physical_block_size);
 	printf("    %.03F GB capacity\n",
-	       (double) (info.zbd_physical_blocks * info.zbd_physical_block_size) / 1000000000);
+	       (double) (info->zbd_physical_blocks * info->zbd_physical_block_size) / 1000000000);
     } else {
-	printf("%s is not an SMR device\n", argv[i]);
+	printf("%s is not an SMR device\n", dev);
     }
 
     return( 0 );
-
 }
