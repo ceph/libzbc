@@ -1,0 +1,6 @@
+set(HEADER_FILES lkvs.hpp lkvs.h sha256.h)
+set(SOURCES liblkvs.cc sha256.c)
+include_directories(../../../../include)
+add_library(liblkvs SHARED ${SOURCES} ${HEADER_FILES})
+set_target_properties(liblkvs PROPERTIES CMAKE_SHARE_LINKER_FLAGS "--version-info 0:0:0")
+target_link_libraries(liblkvs ../../../../libzbc)

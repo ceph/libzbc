@@ -1,0 +1,5 @@
+set(SOURCES lkvsdev_test.cc)
+add_executable(lkvsdev_test lkvsdev_test.cc)
+include_directories(../liblkvs ../../gtest/include ../../../../include)
+set_target_properties(lkvsdev_test PROPERTIES CMAKE_SHARE_LINKER_FLAGS -static)
+add_dependencies(lkvsdev_test ../../gtest/lib/libgtest_main ../../gtest/lib/libgtest ../../src/liblkvs/liblkvs ../../../../libzbc)
