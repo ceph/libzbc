@@ -16,8 +16,8 @@ set(LIBZBC_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(LIBZBC_LINK_DIR "${LIBZBC_ROOT_DIR}/lib")
 include_directories("${LIBZBC_ROOT_DIR}/include")
 
-set(CMAKE_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-unused-parameter -I${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH} ${LIBZBC_ROOT_DIR}/m4 ${LIBZBC_ROOT_DIR}/include")
+set(CMAKE_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-unused-parameter -fPIC -I${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(LIBZBC_INCLUDE_PATH "${CMAKE_INCLUDE_PATH} ${LIBZBC_ROOT_DIR}/lib" PARENT_SCOPE)
 
 add_subdirectory("${LIBZBC_ROOT_DIR}/include")
 add_subdirectory("${LIBZBC_ROOT_DIR}/lib")
