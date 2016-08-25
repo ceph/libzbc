@@ -1,5 +1,5 @@
-set(SOURCES zbc.c zbc_block.c zbc_sg.c zbc_scsi.c zbc_ata.c zbc_fake.c)
-set(HEADER_FILES zbc.h zbc_sg.h)
+set(SOURCES zbc.c zbc_block.c zbc_sg.c zbc_scsi.c zbc_ata.c zbc_fake.c zbc_tools.c)
+set(HEADER_FILES zbc.h zbc_sg.h zbc_tools.h)
 
 add_library(zbc SHARED ${SOURCES} ${HEADER_FILES})
 
